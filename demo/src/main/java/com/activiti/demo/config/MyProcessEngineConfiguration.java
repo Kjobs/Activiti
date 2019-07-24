@@ -4,7 +4,7 @@ import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -12,24 +12,15 @@ public class MyProcessEngineConfiguration implements ProcessEngineConfigurationC
 
     public static final Logger logger = LoggerFactory.getLogger(MyProcessEngineConfiguration.class );
 
-    @Value("${spring.datasource.url}")
-    private String url;
-
-    @Value("${spring.datasource.username}")
-    private String username;
-
-    @Value("${spring.datasource.password}")
-    private String password;
-
-    @Value("${spring.datasource.driver-class-name}")
-    private String driverClassName;
+    @Autowired
+    private ActivitiDataSourceProperties dataSourceProperties;
 
     @Override
     public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
-        springProcessEngineConfiguration.setJdbcDriver(driverClassName);
-        springProcessEngineConfiguration.setJdbcUrl(url);
-        springProcessEngineConfiguration.setJdbcUsername(username);
-        springProcessEngineConfiguration.setJdbcPassword(password);
+        springProcessEngineConfiguration.setJdbcDriver(dataSourceProperties.getDriverClassName());
+        springProcessEngineConfiguration.setJdbcUrl(dataSourceProperties.getUrl());
+        springProcessEngineConfiguration.setJdbcUsername(dataSourceProperties.getUsername());
+        springProcessEngineConfiguration.setJdbcPassword(dataSourceProperties.getPassword());
         springProcessEngineConfiguration.setActivityFontName("宋体");
         springProcessEngineConfiguration.setLabelFontName("宋体");
         springProcessEngineConfiguration.setAnnotationFontName("宋体");
