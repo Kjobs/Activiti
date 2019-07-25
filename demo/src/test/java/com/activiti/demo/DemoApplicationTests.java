@@ -88,6 +88,22 @@ public class DemoApplicationTests {
         }
     }
 
+    /**完成个人任务*/
+    @Test
+    public void completeTask() throws Exception {
+
+        /**获取流程引擎*/
+        ProcessEngine processEngine = spec.buildProcessEngine();
+
+        // 已创建的个人任务ID
+        String taskId = "2505";
+
+        /**根据个人任务ID完成任务*/
+        processEngine.getTaskService().complete(taskId);
+
+        System.out.println("完成任务ID");
+    }
+
     @Test
     public void contextLoads() throws Exception{
         //查看bean是否注入或数据是否null
