@@ -3,12 +3,15 @@ package com.activiti.demo;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {DemoApplication.class})
@@ -17,22 +20,30 @@ public class DemoApplicationTests {
     @Autowired
     private SpringProcessEngineConfiguration spec;
 
+    /**
+     * 部署流程
+     */
     @Test
     public void deploy() {
 
         /**获取流程引擎*/
         ProcessEngine processEngine = spec.buildProcessEngine();
 
-        /**部署流程，RepositoryService与流程定义和部署对象相关*/
+        /**RepositoryService，与流程定义和部署对象相关*/
         Deployment deployment = processEngine.getRepositoryService()
                 .createDeployment()
                 .name("请假流程")
                 .addClasspathResource("ApplyProcess.bpmn")
                 .deploy();
+
+        // 打印测试
         System.out.println("部署流程ID： " + deployment.getId());
         System.out.println("流程名称：" + deployment.getName());
     }
 
+    /**
+     * 启动流程实例
+     */
     @Test
     public void startProcessInstance() throws Exception {
         // 流程定义的Key
@@ -45,9 +56,35 @@ public class DemoApplicationTests {
         /**使用流程定义的key启动流程实例，默认按照最新版本启动*/
         ProcessInstance processInstance = processEngine.getRuntimeService()
                 .startProcessInstanceByKey(processDefinitionKey);
+
+        // 打印测试
         System.out.println("启动流程实例： " + processInstance.getId());
         System.out.println("流程定义ID： " + processInstance.getProcessDefinitionId());
 
+    }
+
+    @Test
+    public void queryPersonalTask() {
+        // 任务办理者
+        String assignee = "a";
+
+        /**获取流程引擎*/
+        ProcessEngine processEngine = spec.buildProcessEngine();
+
+        /**查询任务列表*/
+        List<Task> tasks = processEngine.getTaskService()
+                .createTaskQuery()
+                .taskAssignee(assignee)
+                .list();
+
+        // 打印测试
+        for(Task task : tasks) {
+            System.out.println("任务ID: " + task.getId());
+            System.out.println("任务名称: " + task.getName());
+            System.out.println("流程实例ID: " + task.getProcessInstanceId());
+            System.out.println("执行对象ID: " + task.getExecutionId());
+            System.out.println("--------------------------------------");
+        }
     }
 
     @Test
