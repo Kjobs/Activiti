@@ -101,7 +101,7 @@ public class DemoApplicationTests {
         /**根据个人任务ID完成任务*/
         processEngine.getTaskService().complete(taskId);
 
-        System.out.println("完成任务ID");
+        System.out.println("完成任务！");
     }
 
     @Test
