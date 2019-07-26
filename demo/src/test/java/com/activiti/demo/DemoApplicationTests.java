@@ -20,9 +20,7 @@ public class DemoApplicationTests {
     @Autowired
     private SpringProcessEngineConfiguration spec;
 
-    /**
-     * 部署流程
-     */
+    /**部署流程*/
     @Test
     public void deploy() {
 
@@ -41,9 +39,7 @@ public class DemoApplicationTests {
         System.out.println("流程名称：" + deployment.getName());
     }
 
-    /**
-     * 启动流程实例
-     */
+    /**启动流程实例*/
     @Test
     public void startProcessInstance() throws Exception {
         // 流程定义的Key
