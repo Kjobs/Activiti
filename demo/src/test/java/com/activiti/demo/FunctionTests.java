@@ -2,7 +2,9 @@ package com.activiti.demo;
 
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.repository.Model;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +42,40 @@ public class FunctionTests {
                 System.out.println("执行对象ID： " + task.getExecutionId());
             }
         }
+        System.out.println("测试完成！");
+    }
+
+    @Test
+    public void createProcessModel() {
+
+        ProcessEngine processEngine = spec.buildProcessEngine();
+
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        String name = "流程模型创建测试";
+        String key = "test_key";
+        String description = "流程模型创建测试";
+
+        Model model = repositoryService.newModel();
+        model.setName(name);
+        model.setKey(key);
+        model.setMetaInfo(description);
+
+        repositoryService.saveModel(model);
+
+        System.out.println("测试完成！");
+    }
+
+    @Test
+    public void getProcessModel() {
+        ProcessEngine processEngine = spec.buildProcessEngine();
+
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        String name = "20001";
+        Model model = repositoryService.getModel(name);
+        System.out.println(model.getId());
+
         System.out.println("测试完成！");
     }
 }

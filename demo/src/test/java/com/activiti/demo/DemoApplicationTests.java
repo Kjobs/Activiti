@@ -32,6 +32,7 @@ public class DemoApplicationTests {
                 .createDeployment()
                 .name("请假流程")
                 .addClasspathResource("ApplyProcess.bpmn")
+                .addClasspathResource("ApplyProcess.png")
                 .deploy();
 
         // 打印测试
