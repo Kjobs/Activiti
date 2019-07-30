@@ -1,9 +1,13 @@
 package com.activiti.demo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.junit.Test;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -75,6 +80,27 @@ public class FunctionTests {
         String name = "20001";
         Model model = repositoryService.getModel(name);
         System.out.println(model.getId());
+
+        System.out.println("测试完成！");
+    }
+
+    @Test
+    public void deployProcessByModel() {
+        ProcessEngine processEngine = spec.buildProcessEngine();
+
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        String id = "20001";
+
+        repositoryService.addModelEditorSource(id, "ApplyProcess.bpmn".getBytes());
+
+        Deployment deployment = repositoryService
+                .createDeployment()
+//                .addBytes(id, "ApplyProcess.bpmn".getBytes())
+                .deploy();
+
+        System.out.println("部署ID："+deployment.getId());
+        System.out.println("部署时间："+deployment.getDeploymentTime());
 
         System.out.println("测试完成！");
     }
